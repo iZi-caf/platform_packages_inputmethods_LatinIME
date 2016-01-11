@@ -151,8 +151,15 @@ public class SettingsValues {
                 && inputAttributes.mIsGeneralTextInput;
         mBlockPotentiallyOffensive = Settings.readBlockPotentiallyOffensive(prefs, res);
         mAutoCorrectEnabled = Settings.readAutoCorrectEnabled(prefs, res);
+        String defaultAutoCorrectionThreshold
+                = res.getString(R.string.auto_correction_threshold_mode_default_index);
+        if (defaultAutoCorrectionThreshold.equals(res
+                .getString(R.string.auto_correction_threshold_mode_index_off))) {
+            defaultAutoCorrectionThreshold
+                    = res.getString(R.string.auto_correction_threshold_mode_index_modest);
+        }
         final String autoCorrectionThresholdRawValue = mAutoCorrectEnabled
-                ? res.getString(R.string.auto_correction_threshold_mode_default_index)
+                ? defaultAutoCorrectionThreshold
                 : res.getString(R.string.auto_correction_threshold_mode_index_off);
         mBigramPredictionEnabled = readBigramPredictionEnabled(prefs, res);
         mDoubleSpacePeriodTimeout = res.getInteger(R.integer.config_double_space_period_timeout);

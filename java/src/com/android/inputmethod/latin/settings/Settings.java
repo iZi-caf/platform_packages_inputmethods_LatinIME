@@ -23,6 +23,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.inputmethod.compat.BuildCompatUtils;
@@ -61,6 +62,8 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
     // PREF_AUTO_CORRECTION_THRESHOLD_OBSOLETE is obsolete. Use PREF_AUTO_CORRECTION instead.
     public static final String PREF_AUTO_CORRECTION_THRESHOLD_OBSOLETE =
             "auto_correction_threshold";
+    public static final String PREF_AUTO_CORRECTION_THRESHOLD_CUSTOMIZE_DONE =
+            "auto_correction_threshold_customize_done";
     public static final String PREF_AUTO_CORRECTION = "pref_key_auto_correction";
     // PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE is obsolete. Use PREF_SHOW_SUGGESTIONS instead.
     public static final String PREF_SHOW_SUGGESTIONS_SETTING_OBSOLETE = "show_suggestions_setting";
@@ -452,6 +455,22 @@ public final class Settings implements SharedPreferences.OnSharedPreferenceChang
             } else {
                 editor.putBoolean(PREF_AUTO_CORRECTION, true);
             }
+            editor.commit();
+        }
+
+        final String thresholdSettingCustomizeOff =
+                prefs.getString(PREF_AUTO_CORRECTION_THRESHOLD_CUSTOMIZE_DONE, null);
+        final String autoCorrectionCustomize =
+                res.getString(R.string.auto_correction_threshold_mode_default_index);
+        if (TextUtils.isEmpty(thresholdSettingCustomizeOff)
+                || !autoCorrectionCustomize.equals(thresholdSettingCustomizeOff)) {
+            final String autoCorrectionOff =
+                    res.getString(R.string.auto_correction_threshold_mode_index_off);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(PREF_AUTO_CORRECTION,
+                    !autoCorrectionCustomize.equals(autoCorrectionOff));
+            editor.putString(PREF_AUTO_CORRECTION_THRESHOLD_CUSTOMIZE_DONE,
+                    autoCorrectionCustomize);
             editor.commit();
         }
     }
